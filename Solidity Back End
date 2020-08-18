@@ -1,0 +1,97 @@
+pragma solidity >=0.5.0 <0.6.0;
+import "./ownable.sol";
+
+contract SocialMediaUpdate is Ownable{
+    struct User{
+        uint username;
+        uint picture;
+        uint karma;
+    }
+    struct Post{
+        uint message;
+        uint op;
+        uint post;
+        uint tip;
+        uint time;
+    }
+    
+    User[] public users;
+    Post[] public posts;
+    
+    mapping (uint => uint[]) userToPosts;
+    mapping (address => uint) addressToUser;
+    mapping (uint => address payable) userToAddress;
+    mapping (uint => uint[]) postToComments;
+    
+    function createUser(uint username, uint picture) public{
+        require(addressToUser[msg.sender] == 0x0);
+        uint  id = users.push(User(username, picture, 0)) - 1;
+        addressToUser[msg.sender] = id;
+        userToAddress[id] = msg.sender;
+    }
+    
+    function createPost(uint message) public{
+        require(addressToUser[msg.sender] != 0x0);
+        uint id = posts.push(Post(message, addressToUser[msg.sender], 0x0, 0, now)) - 1;
+        userToPosts[addressToUser[msg.sender]].push(id);
+    }
+    
+    function createComment(uint message, uint post) public{
+        require(addressToUser[msg.sender] != 0x0);
+        uint id = posts.push(Post(message, addressToUser[msg.sender], post, 0, now)) - 1;
+        userToPosts[addressToUser[msg.sender]].push(id);
+        postToComments[post].push(id);
+    }
+    
+    function tipPost(uint id) public payable{
+        posts[id].tip += msg.value;
+        users[posts[id].op].karma += msg.value;
+        userToAddress[posts[id].op].transfer(msg.value * 19 / 20);
+    }
+    function changeUsername(uint name) public{
+        users[addressToUser[msg.sender]].username = name;
+    }
+    function changePicture(uint pic) public{
+        users[addressToUser[msg.sender]].picture = pic;
+    }
+    function viewUsername(uint id) external view returns(uint){
+        return users[id].username;
+    }
+    function viewKarma(uint id) external view returns(uint){
+        return users[id].karma;
+    }
+    function viewMessage(uint id) external view returns(uint){
+        return posts[id].message;
+    }
+    function viewOp(uint id) external view returns(uint){
+        return posts[id].op;
+    }
+    function viewTip(uint id) external view returns(uint){
+        return posts[id].tip;
+    }
+    function viewCommentPost(uint id) external view returns(uint){
+        return posts[id].post;
+    }
+    function viewUserAddress(uint id) external view returns(address payable){
+        return userToAddress[id];
+    }
+    function viewAddressUser(address id) external view returns(uint){
+        return addressToUser[id];
+    }
+    function viewPostComment(uint id) external view returns(uint[] memory){
+        return postToComments[id];
+    }
+    function viewUserPost(uint id) external view returns(uint[] memory){
+        return userToPosts[id];
+    }
+    function viewUserPicture(uint id) external view returns(uint){
+        return users[id].picture;
+    }
+    function viewPostTime(uint id) external view returns(uint){
+        return posts[id].time;
+    }
+    function withdrawl() public onlyOwner{
+        address payable add = owner();
+        add.transfer(address(this).balance);
+    }
+}
