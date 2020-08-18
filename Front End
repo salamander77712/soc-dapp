@@ -426,7 +426,7 @@ continue;
 return output;
 }
 //converts blockchain-formatted charcters to binary
-function SetToBlock(text){
+function SetToBinary(text){
 	var i;
 	var output = '';
 	for(i = 0; i < text.length; i++){
@@ -557,11 +557,38 @@ continue;
 	}
 return output;
   }
+//Makes text fully ready for upload to blockchain
+function textUploadReady(text){
+var output = [];
+var binary = setToBinary(textToSet(text));//convert text to binary respresentation
+var i;
+var tmp;
+for(i = 0; i < binary.length / 255; i++){
+tmp = binary.substring(0,((i + 1) * 255) + 1);
+tmp = '0' + tmp;// add 0 to begining of each binary chunk, indicating that message is text
+output.append(tmp);
+}// seperate binary into 256 bit chunks, the most the blockchain function can accept
+while(output[output.length - 1].length != 256){
+output[output.length - 1] += '00000';
+}// make sure that the final chunk is full by continually adding null
+for(i = 0; i < output.length; i++){
+output[i] = parseInt(output[i],2);
+}//convert output to decimal
+return output;
+}
+//function to make posts in bulk
+function createPostBulk(message){
+text = textUploadReady(message);
+var i;
+for(i = 0; i < text.length; i++){
+createPost(text[i]);
+}
+}
 //Functions to create content templates
 //Content if user hasn't yet set username and profile picture
 function noUser(){
 	$("#content").empty();
-	$("#content").append(`<form onsubmit="createUser(uname,upic)">
+	$("#content").append(`<form onsubmit="createUser(textUploadReady(uname)[0],upic)">
   <label for="uname">Username:</label><br>
   <input type="text" id="uname" name="uname" value=""><br>
   <label for="upic">Picture:</label><br>
