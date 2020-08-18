@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Soc-Dapp front-end</title>
+    <script language="javascript" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="web3.min.js"></script>
+    <script language="javascript" type="text/javascript" src="abi.js"></script>
+  </head>
+  <body>
+  <div id="content"></div>//Empty div for website content to occupy
+//Setup connection with blockchain 
+  <script>
+  var Social;
+  var userAccount;
+  function startApp() {
+        var socialAddress = "0x12ff6D76B93DCf11eF10C31E8D98c6bdA1CBAC69";
+        Social = new web3js.eth.Contract(SocialMediaUpdateABI, socialAddress);
+	var accountInterval = setInterval(function() {
+         
+          if (web3.eth.accounts[0] !== userAccount) {
+            userAccount = web3.eth.accounts[0];
+           
+            getZombiesByOwner(userAccount)
+            .then(displayZombies);
+          }
+        }, 100);
+      }
+//functions to interact with blockchain
+  function viewUsername(address) {
+	return Social.methods.viewUsername(address).call()
+  }
+function viewKarma(id) {
+	return Social.methods.viewKarma(id).call()
+  }
+function viewOp(id) {
+	return Social.methods.viewOp(id).call()
+  }
+function viewTip(id) {
+	return Social.methods.viewTip(id).call()
+  }
+function viewCommentPost(id) {
+	return Social.methods.viewCommentPost(id).call()
+  }
+function viewUserAddress(id) {
+	return Social.methods.viewUserAddress(id).call()
+  }
+function viewAddressUser(address) {
+	return Social.methods.viewAddressUser(address).call()
+  }
+function viewPostComment(id) {
+	return Social.methods.viewPostComment(id).call()
+  }
+function viewUserPost(id) {
+	return Social.methods.viewUserPost(id).call()
+  }
+function viewUserPicture(id) {
+	return Social.methods.viewUserPicture(id).call()
+  }
+function viewPostTime(id) {
+	return Social.methods.viewPostTime(id).call()
+  }
+function createUser(username, picture) {
+	Social.methods.createUser(username, picture).send()
+  }
+function createPost(message) {
+	Social.methods.createPost(message).send()
+  }
+function createComment(message, post) {
+	Social.methods.createComment(message, post).send()
+  }
+function tipPost(id) {
+	Social.methods.tipPost(id).send()
+  }
+function changeUsername(name) {
+	Social.methods.changeUsername(name).send()
+  }
+function changePicture(pic) {
+	Social.methods.changePicture(pic).send()
+  }
+function withdrawl() {
+	Social.methods.withdrawl().send()
+  }
+//converts text to blockchain-formatted text
+function textToSet(text){
+var i;
+var output = '';
+for(i = 0; i < text.length; i++){
+if(text[i] == 'a'){
+output += 'a';
+continue;
+}
+if(text[i] == 'b'){
+output += 'b';
+continue;
+}
+if(text[i] == 'c'){
+output += 'c';
+continue;
+}
+if(text[i] == 'd'){
+output += 'd';
+continue;
+}
+if(text[i] == 'e'){
+output += 'e';
+continue;
+}
+if(text[i] == 'f'){
+output += 'f';
+continue;
+}
+if(text[i] == 'g'){
+output += 'g';
+continue;
+}
+if(text[i] == 'h'){
+output += 'h';
+continue;
+}
+if(text[i] == 'i'){
+output += 'i';
+continue;
+}
+if(text[i] == 'j'){
+output += 'j';
+continue;
+}
+if(text[i] == 'k'){
+output += 'k';
+continue;
+}
+if(text[i] == 'l'){
+output += 'l';
+continue;
+}
+if(text[i] == 'm'){
+output += 'm';
+continue;
+}
+if(text[i] == 'n'){
+output += 'n';
+continue;
+}
+if(text[i] == 'o'){
+output += 'o';
+continue;
+}
+if(text[i] == 'p'){
+output += 'p';
+continue;
+}
+if(text[i] == 'q'){
+output += 'q';
+continue;
+}
+if(text[i] == 'r'){
+output += 'r';
+continue;
+}
+if(text[i] == 's'){
+output += 's';
+continue;
+}
+if(text[i] == 't'){
+output += 't';
+continue;
+}
+if(text[i] == 'u'){
+output += 'u';
+continue;
+}
+if(text[i] == 'v'){
+output += 'v';
+continue;
+}
+if(text[i] == 'w'){
+output += 'w';
+continue;
+}
+if(text[i] == 'x'){
+output += 'x';
+continue;
+}
+if(text[i] == 'y'){
+output += 'y';
+continue;
+}
+if(text[i] == 'z'){
+output += 'z';
+continue;
+}
+if(text[i] == 'A'){
+output += '|a';
+continue;
+}
+if(text[i] == 'B'){
+output += '|b';
+continue;
+}
+if(text[i] == 'C'){
+output += '|c';
+continue;
+}
+if(text[i] == 'D'){
+output += '|d';
+continue;
+}
+if(text[i] == 'E'){
+output += '|e';
+continue;
+}
+if(text[i] == 'F'){
+output += '|f';
+continue;
+}
+if(text[i] == 'G'){
+output += '|g';
+continue;
+}
+if(text[i] == 'H'){
+output += '|h';
+continue;
+}
+if(text[i] == 'I'){
+output += '|i';
+continue;
+}
+if(text[i] == 'J'){
+output += '|j';
+continue;
+}
+if(text[i] == 'K'){
+output += '|k';
+continue;
+}
+if(text[i] == 'L'){
+output += '|l';
+continue;
+}
+if(text[i] == 'M'){
+output += '|m';
+continue;
+}
+if(text[i] == 'N'){
+output += '|n';
+continue;
+}
+if(text[i] == 'O'){
+output += '|o';
+continue;
+}
+if(text[i] == 'P'){
+output += '|p';
+continue;
+}
+if(text[i] == 'Q'){
+output += '|q';
+continue;
+}
+if(text[i] == 'R'){
+output += '|r';
+continue;
+}
+if(text[i] == 'S'){
+output += '|s';
+continue;
+}
+if(text[i] == 'T'){
+output += '|t';
+continue;
+}
+if(text[i] == 'U'){
+output += '|u';
+continue;
+}
+if(text[i] == 'V'){
+output += '|v';
+continue;
+}
+if(text[i] == 'W'){
+output += '|w';
+continue;
+}
+if(text[i] == 'X'){
+output += '|x';
+continue;
+}
+if(text[i] == 'Y'){
+output += '|y';
+continue;
+}
+if(text[i] == 'Z'){
+output += '|z';
+continue;
+}
+if(text[i] == '0'){
+output += '//a';
+continue;
+}
+if(text[i] == '1'){
+output += '//b';
+continue;
+}
+if(text[i] == '2'){
+output += '//c';
+continue;
+}
+if(text[i] == '3'){
+output += '//d';
+continue;
+}
+if(text[i] == '4'){
+output += '//e';
+continue;
+}
+if(text[i] == '5'){
+output += '//f';
+continue;
+}
+if(text[i] == '6'){
+output += '//g';
+continue;
+}
+if(text[i] == '7'){
+output += '//h';
+continue;
+}
+if(text[i] == '8'){
+output += '//i';
+continue;
+}
+if(text[i] == '9'){
+output += '//j';
+continue;
+}
+if(text[i] == '!'){
+output += '//k';
+continue;
+}
+if(text[i] == '@'){
+output += '//l';
+continue;
+}
+if(text[i] == '#'){
+output += '//m';
+continue;
+}
+if(text[i] == '$'){
+output += '//n';
+continue;
+}
+if(text[i] == '%'){
+output += '//o';
+continue;
+}
+if(text[i] == '^'){
+output += '//p';
+continue;
+}
+if(text[i] == '&'){
+output += '//q';
+continue;
+}
+if(text[i] == '*'){
+output += '//r';
+continue;
+}
+if(text[i] == '('){
+output += '//s';
+continue;
+}
+if(text[i] == ')'){
+output += '//t';
+continue;
+}
+if(text[i] == '-'){
+output += '//u';
+continue;
+}
+if(text[i] == '='){
+output += '//v';
+continue;
+}
+if(text[i] == '+'){
+output += '//w';
+continue;
+}
+if(text[i] == ':'){
+output += '//x';
+continue;
+}
+if(text[i] == "'"){
+output += '//y';
+continue;
+}
+if(text[i] == '"'){
+output += '//z';
+continue;
+}
+if(text[i] == '.'){
+output += '.';
+continue;
+}
+if(text[i] == ','){
+output += ',';
+continue;
+}
+if(text[i] == ' '){
+output += ' ';
+continue;
+}
+if(text[i] == '?'){
+output += '//.';
+continue;
+}
+if(text[i] == '//'){
+output += '////';
+continue;
+}
+if(text[i] == '|'){
+output += '||';
+continue;
+}
+}
+return output;
+}
+//converts blockchain-formatted charcters to binary
+function SetToBlock(text){
+	var i;
+	var output = '';
+	for(i = 0; i < text.length; i++){
+		if(text[i] == 'a'){
+			output += '00001'
+continue;
+		}
+if(text[i] == 'b'){
+			output += '00010'
+continue;
+		}
+if(text[i] == 'c'){
+			output += '00011'
+continue;
+		}
+if(text[i] == 'd'){
+			output += '00100'
+continue;
+		}
+if(text[i] == 'e'){
+			output += '00101'
+continue;
+		}
+if(text[i] == 'f'){
+			output += '00110'
+continue;
+		}
+if(text[i] == 'g'){
+			output += '00111'
+continue;
+		}
+if(text[i] == 'h'){
+			output += '01000'
+continue;
+		}
+if(text[i] == 'i'){
+			output += '01001'
+continue;
+		}
+if(text[i] == 'j'){
+			output += '01010'
+continue;
+		}
+if(text[i] == 'k'){
+			output += '01011'
+continue;
+		}
+if(text[i] == 'l'){
+			output += '01100'
+continue;
+		}
+if(text[i] == 'm'){
+			output += '01101'
+continue;
+		}
+if(text[i] == 'n'){
+			output += '01110'
+continue;
+		}
+if(text[i] == 'o'){
+			output += '01111'
+continue;
+		}
+if(text[i] == 'p'){
+			output += '10000'
+continue;
+		}
+if(text[i] == 'q'){
+			output += '10001'
+continue;
+		}
+if(text[i] == 'r'){
+			output += '10010'
+continue;
+		}
+if(text[i] == 's'){
+			output += '10011'
+continue;
+		}
+if(text[i] == 't'){
+			output += '10100'
+continue;
+		}
+if(text[i] == 'u'){
+			output += '10101'
+continue;
+		}
+if(text[i] == 'v'){
+			output += '10110'
+continue;
+		}
+if(text[i] == 'w'){
+			output += '10111'
+continue;
+		}
+if(text[i] == 'x'){
+			output += '11000'
+continue;
+		}
+if(text[i] == 'y'){
+			output += '11001'
+continue;
+		}
+if(text[i] == 'z'){
+			output += '11010'
+continue;
+		}
+if(text[i] == '/'){
+			output += '11011'
+continue;
+		}
+if(text[i] == '|'){
+			output += '11100'
+continue;
+		}
+if(text[i] == '.'){
+			output += '11101'
+continue;
+		}
+if(text[i] == ','){
+			output += '11110'
+continue;
+		}
+if(text[i] == ' '){
+			output += '11111'
+continue;
+		}
+	}
+return output;
+  }
+//Functions to create content templates
+//Content if user hasn't yet set username and profile picture
+function noUser(){
+	$("#content").empty();
+	$("#content").append(`<form onsubmit="createUser(uname,upic)">
+  <label for="uname">Username:</label><br>
+  <input type="text" id="uname" name="uname" value=""><br>
+  <label for="upic">Picture:</label><br>
+  <input type="text" id="upic" name="upic" value=""><br><br>
+  <input type="submit" value="Create New User">
+</form> `);
+}
+  window.addEventListener('load', function() {
+
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+    // Use Mist/MetaMask's provider
+    web3js = new Web3(web3.currentProvider);
+  } else {
+    // Handle the case where the user doesn't have web3. Probably
+    // show them a message telling them to install Metamask in
+    // order to use our app.
+  }
+
+  // Now you can start your app & access web3js freely:
+  startApp()
+
+})
+</script>
+  </body>
+</html>
