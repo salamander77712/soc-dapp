@@ -3,57 +3,59 @@ import "./ownable.sol";
 
 contract SocialMediaUpdate is Ownable{
     struct User{
-        uint username;
+        uint username;// can be changed, users '@' name (user id) is determined upon account created and can't be changed
         uint picture;
-        uint karma;
-    }
+        uint karma;// total amount of wei that other users have tipped on this user's posts
+    }// holds user data
     struct Post{
-        uint message;
-        uint op;
-        uint post;
-        uint tip;
-        uint time;
-    }
+        uint message;// post's content, encoded in binary using custom limited character set see Character Code.csv for more details. Can be set to link to a pictue oen front end server if first bit is set to 1, if 0 will be interpreted as text
+        uint op;// id for the user who created the post
+        uint post;// used to show which post this is under, if post is a comment
+        uint tip;// shows how much other users have tipped this post
+        uint time;// time of post creation
+    }// holds post data
     
-    User[] public users;
-    Post[] public posts;
+    User[] public users;// stores users and their ids
+    Post[] public posts;// stores posts and their ids
     
-    mapping (uint => uint[]) userToPosts;
-    mapping (address => uint) addressToUser;
-    mapping (uint => address payable) userToAddress;
-    mapping (uint => uint[]) postToComments;
+    mapping (uint => uint[]) userToPosts;// returns ids of all user's posts
+    mapping (address => uint) addressToUser;// returns user id associated with address
+    mapping (uint => address payable) userToAddress;// returns address associated with user
+    mapping (uint => uint[]) postToComments;// returns ids of all posts that comment on this one, dose not include comments to comments
     
     function createUser(uint username, uint picture) public{
-        require(addressToUser[msg.sender] == 0x0);
-        uint  id = users.push(User(username, picture, 0)) - 1;
+        require(addressToUser[msg.sender] == 0x0);// make sure user dosen't already have an account
+        uint  id = users.push(User(username, picture, 0)) - 1;// creates user using input and adds it to the Users array
         addressToUser[msg.sender] = id;
-        userToAddress[id] = msg.sender;
+        userToAddress[id] = msg.sender;// link address and user using mappings
     }
     
     function createPost(uint message) public{
-        require(addressToUser[msg.sender] != 0x0);
-        uint id = posts.push(Post(message, addressToUser[msg.sender], 0x0, 0, now)) - 1;
-        userToPosts[addressToUser[msg.sender]].push(id);
+        require(addressToUser[msg.sender] != 0x0);// make sure user has an account
+        uint id = posts.push(Post(message, addressToUser[msg.sender], 0x0, 0, now)) - 1;// post attribute is set to null because post isn't a comment
+        userToPosts[addressToUser[msg.sender]].push(id);// add post to user's post array
     }
     
     function createComment(uint message, uint post) public{
         require(addressToUser[msg.sender] != 0x0);
         uint id = posts.push(Post(message, addressToUser[msg.sender], post, 0, now)) - 1;
         userToPosts[addressToUser[msg.sender]].push(id);
-        postToComments[post].push(id);
+        postToComments[post].push(id);// add comment to origional post's comment array
     }
     
-    function tipPost(uint id) public payable{
+    function tipPost(uint id) public payable{ //let people tip posts using ether
         posts[id].tip += msg.value;
         users[posts[id].op].karma += msg.value;
-        userToAddress[posts[id].op].transfer(msg.value * 19 / 20);
+        userToAddress[posts[id].op].transfer(msg.value * 19 / 20);// 1/20 of the tip stays in the contract and can be withdrawn by the owner
     }
+    //function to let users change name and picture
     function changeUsername(uint name) public{
         users[addressToUser[msg.sender]].username = name;
     }
     function changePicture(uint pic) public{
         users[addressToUser[msg.sender]].picture = pic;
     }
+    //functions to views information about posts / users
     function viewUsername(uint id) external view returns(uint){
         return users[id].username;
     }
@@ -90,7 +92,7 @@ contract SocialMediaUpdate is Ownable{
     function viewPostTime(uint id) external view returns(uint){
         return posts[id].time;
     }
-    function withdrawl() public onlyOwner{
+    function withdrawl() public onlyOwner{// used by owner to collect 1/20 fee from tips
         address payable add = owner();
         add.transfer(address(this).balance);
     }
